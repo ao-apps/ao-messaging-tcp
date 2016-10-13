@@ -58,10 +58,10 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 							<artifactId>maven-javadoc-plugin</artifactId>
 							<configuration>
 								<links>
-									<link>https://www.aoindustries.com/docs/ao-concurrent/</link>
+									<link>https://www.aoindustries.com/ao-concurrent/apidocs/</link>
 									<link>https://www.aoindustries.com/ao-messaging/api/apidocs/</link>
 									<link>https://www.aoindustries.com/ao-messaging/base/apidocs/</link>
-									<link>https://www.aoindustries.com/docs/aocode-public/</link>
+									<link>https://www.aoindustries.com/aocode-public/apidocs/</link>
 								</links>
 							</configuration>
 						</plugin>
