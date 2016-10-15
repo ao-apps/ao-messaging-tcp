@@ -4,7 +4,7 @@ Asynchronous bidirectional messaging over TCP sockets.
 ## Project Links
 * [Project Home](https://www.aoindustries.com/ao-messaging/tcp/)
 * [API Docs](https://www.aoindustries.com/ao-messaging/tcp/apidocs/)
-* [Maven Central Repository](http://search.maven.org/#search|gav|1|g:%22com.aoindustries%22%20AND%20a:%22ao-messaging-tcp%22)
+* [Maven Central Repository](https://search.maven.org/#search|gav|1|g:%22com.aoindustries%22%20AND%20a:%22ao-messaging-tcp%22)
 * [GitHub](https://github.com/aoindustries/ao-messaging-tcp)
 
 ## Modules
