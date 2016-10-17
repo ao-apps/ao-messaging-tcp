@@ -9,7 +9,7 @@ Asynchronous bidirectional messaging over TCP sockets.
 
 ## Modules
 * [AO Messaging TCP Client](https://www.aoindustries.com/ao-messaging/tcp/client/)
-* [AO Messaging TCP Server](https://www.aoindustries.com/ao-messaging/tcp/servlet/)
+* [AO Messaging TCP Server](https://www.aoindustries.com/ao-messaging/tcp/server/)
 
 ## Contact Us
 For questions or support, please [contact us](https://www.aoindustries.com/contact):
