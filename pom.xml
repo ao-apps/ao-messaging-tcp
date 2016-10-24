@@ -38,8 +38,6 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 	<properties>
 		<bookPath>/${project.parent.artifactId}/tcp</bookPath>
 		<shortTitle>TCP</shortTitle>
-		<javadoc.breadcrumbs><![CDATA[<a target="_top" href="${project.parent.url}">${project.parent.name}</a>
-/ <a target="_top" href="${project.url}">${shortTitle}</a>]]></javadoc.breadcrumbs>
 		<javadoc.modules><![CDATA[<div style="float:left; margin: 0 1em">
 			<h2 style="margin-top: 0em">Modules</h2>
 			<ul>
