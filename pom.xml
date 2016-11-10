@@ -36,7 +36,6 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 	<packaging>jar</packaging>
 
 	<properties>
-		<bookPath>/${project.parent.artifactId}/tcp</bookPath>
 		<shortTitle>TCP</shortTitle>
 		<javadoc.modules><![CDATA[<div style="float:left; margin: 0 1em">
 			<h2 style="margin-top: 0em">Modules</h2>
@@ -48,7 +47,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 	</properties>
 
 	<name>AO Messaging TCP</name>
-	<url>https://aoindustries.com${bookPath}/</url><!-- Can't inherit due to multi-module -->
+	<url>https://aoindustries.com/${project.parent.artifactId}/tcp/</url>
 	<description>Asynchronous bidirectional messaging over TCP sockets.</description>
 	<inceptionYear>2014</inceptionYear>
 
