@@ -40,7 +40,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<core:child book="/ao-messaging/tcp/client" page="/index.jspx" />
 		<core:child book="/ao-messaging/tcp/server" page="/index.jspx" />
 		<p>
-			@{description.html}
+			@{documented.description}
 		</p>
 		<section:section label="Project Links">
 			<ul>
