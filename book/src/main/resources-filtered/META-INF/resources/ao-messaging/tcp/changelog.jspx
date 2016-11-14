@@ -36,12 +36,18 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T20:48:57-0500"
+		dateModified="2016-11-13T21:10:46-0600"
 	>
 		<!-- The current snapshot, unreleased version -->
-		<c:if test="${fn:endsWith('@{com.aoindustries:ao-messaging-tcp:jar.version}', '-SNAPSHOT')}">
+		<c:set var="version" value="@{com.aoindustries:ao-messaging-tcp:pom.version}" />
+		<ao:assert
+			test="${!fn:startsWith(version, '@')}"
+			message="Version not substituted: #{version}"
+		/>
+		<c:if test="${fn:endsWith(version, '-SNAPSHOT')}">
 			<changelog:release
 				projectName="@{documented.name}"
-				version="@{com.aoindustries:ao-messaging-tcp:jar.version}"
+				version="#{version}"
 				groupId="@{documented.groupId}"
 				artifactId="@{documented.artifactId}"
 				scmUrl="@{documented.scm.url}"
