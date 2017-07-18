@@ -1,6 +1,6 @@
 <!--
 ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
-Copyright (C) 2016  AO Industries, Inc.
+Copyright (C) 2016, 2017  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -33,12 +33,21 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="@{documented.shortTitle}"
 		description="@{documented.description}"
 		datePublished="2016-10-16T22:58:00-0500"
-		dateModified="2016-10-28T00:11:09-0500"
+		dateModified="2017-07-18T17:55:22-0500"
 	>
 		<core:child page="changelog.jspx" />
 		<core:child page="apidocs/index.jspx" />
 		<core:child book="/ao-messaging/tcp/client" page="/index.jspx" />
 		<core:child book="/ao-messaging/tcp/server" page="/index.jspx" />
+		<ao:include
+			page="/ao-badges/badges.inc.jspx"
+			arg.projectStatus="${currentPage.property.projectStatus}"
+			arg.managementStatus="${currentPage.property.managementStatus}"
+			arg.packagingStatus="${currentPage.property.packagingStatus}"
+			arg.javaVersion="${currentPage.property.javaVersion}"
+			arg.semanticVersioning="${currentPage.property.semanticVersioning}"
+			arg.license="${currentPage.property.license}"
+		/>
 		<p>
 			@{documented.description}
 		</p>
