@@ -33,7 +33,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 
 	<groupId>com.aoindustries</groupId>
 	<artifactId>ao-messaging-tcp</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-validation-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -92,27 +92,27 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>ao-concurrent</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4-validation-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>ao-lang</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-validation-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>ao-messaging-api</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4-validation-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>ao-messaging-base</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4-validation-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aoindustries</groupId>
 			<artifactId>aocode-public</artifactId>
-			<version>1.9.0</version>
+			<version>1.9.1-validation-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
