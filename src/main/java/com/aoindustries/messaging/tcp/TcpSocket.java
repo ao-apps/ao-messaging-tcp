@@ -1,6 +1,6 @@
 /*
  * ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
- * Copyright (C) 2014, 2015, 2016  AO Industries, Inc.
+ * Copyright (C) 2014, 2015, 2016, 2017  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -32,7 +32,9 @@ import com.aoindustries.messaging.Socket;
 import com.aoindustries.messaging.base.AbstractSocket;
 import com.aoindustries.messaging.base.AbstractSocketContext;
 import com.aoindustries.security.Identifier;
+import com.aoindustries.tempfiles.TempFileContext;
 import com.aoindustries.util.concurrent.Callback;
+import com.aoindustries.util.concurrent.Executor;
 import com.aoindustries.util.concurrent.Executors;
 import java.io.IOException;
 import java.net.SocketException;
@@ -42,6 +44,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -130,35 +133,67 @@ public class TcpSocket extends AbstractSocket {
 								if(onError!=null) onError.call(new SocketException("Socket is closed"));
 							} else {
 								// Handle incoming messages in a Thread, can try nio later
-								executors.getUnbounded().submit(
+								final Executor unbounded = executors.getUnbounded();
+								unbounded.submit(
 									new Runnable() {
 										@Override
 										public void run() {
 											try {
-												while(true) {
-													CompressedDataInputStream in;
-													synchronized(lock) {
-														// Check if closed
-														in = TcpSocket.this.in;
-														if(in==null) break;
-													}
-													final int size = in.readCompressedInt();
-													List<Message> messages = new ArrayList<Message>(size);
-													for(int i=0; i<size; i++) {
-														MessageType type = MessageType.getFromTypeByte(in.readByte());
-														int arraySize = in.readCompressedInt();
-														byte[] array = new byte[arraySize];
-														IoUtils.readFully(in, array, 0, arraySize);
-														messages.add(
-															type.decode(
-																new ByteArray(
-																	array,
-																	arraySize
+												TempFileContext tempFileContext = new TempFileContext();
+												try {
+													while(true) {
+														CompressedDataInputStream in;
+														synchronized(lock) {
+															// Check if closed
+															in = TcpSocket.this.in;
+															if(in==null) break;
+														}
+														final int size = in.readCompressedInt();
+														List<Message> messages = new ArrayList<Message>(size);
+														for(int i=0; i<size; i++) {
+															MessageType type = MessageType.getFromTypeByte(in.readByte());
+															int arraySize = in.readCompressedInt();
+															byte[] array = new byte[arraySize];
+															IoUtils.readFully(in, array, 0, arraySize);
+															messages.add(
+																type.decode(
+																	new ByteArray(
+																		array,
+																		arraySize
+																	),
+																	tempFileContext
 																)
-															)
-														);
+															);
+														}
+														final Future<?> future = callOnMessages(Collections.unmodifiableList(messages));
+														if(tempFileContext.getSize() != 0) {
+															// Close temp file context, thus deleting temp files, once all messages have been handled
+															final TempFileContext closeMeNow = tempFileContext;
+															unbounded.submit(
+																new Runnable() {
+																	@Override
+																	public void run() {
+																		try {
+																			try {
+																				// Wait until all messages handled
+																				future.get();
+																			} finally {
+																				// Delete temp files
+																				closeMeNow.close();
+																			}
+																		} catch(ThreadDeath td) {
+																			throw td;
+																		} catch(Throwable t) {
+																			logger.log(Level.SEVERE, null, t);
+																		}
+																	}
+																}
+															);
+															tempFileContext = new TempFileContext();
+														}
 													}
-													callOnMessages(Collections.unmodifiableList(messages));
+												} finally {
+													tempFileContext.close();
 												}
 											} catch(Exception exc) {
 												if(!isClosed()) callOnError(exc);

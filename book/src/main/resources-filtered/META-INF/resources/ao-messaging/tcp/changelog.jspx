@@ -37,7 +37,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T20:48:57-0500"
-		dateModified="2017-07-20T09:01:05-0500"
+		dateModified="2017-08-09T03:59:12-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:ao-messaging-tcp:pom.version}" />
@@ -52,7 +52,15 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				groupId="@{documented.groupId}"
 				artifactId="@{documented.artifactId}"
 				scmUrl="@{documented.scm.url}"
-			/>
+			>
+				<ul>
+					<li>
+						Deprecated uses of <ao:a href="@{javac.link.javaApi}java/io/File#deleteOnExit()">File.deleteOnExit()</ao:a>
+						in favor of new <ao:a href="https://aoindustries.com/ao-tempfiles/apidocs/com/aoindustries/tempfiles/TempFileContext.html">TempFileContext</ao:a>
+						that does not suffer from a memory leak in long-running applications.
+					</li>
+				</ul>
+			</changelog:release>
 		</c:if>
 
 		<changelog:release
