@@ -1,6 +1,6 @@
 /*
  * ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
- * Copyright (C) 2014, 2015, 2016, 2017  AO Industries, Inc.
+ * Copyright (C) 2014, 2015, 2016, 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -139,7 +139,13 @@ public class TcpSocket extends AbstractSocket {
 										@Override
 										public void run() {
 											try {
-												TempFileContext tempFileContext = new TempFileContext();
+												TempFileContext tempFileContext;
+												try {
+													tempFileContext = new TempFileContext();
+												} catch(SecurityException e) {
+													logger.log(Level.WARNING, null, e);
+													tempFileContext = null;
+												}
 												try {
 													while(true) {
 														CompressedDataInputStream in;
@@ -166,7 +172,7 @@ public class TcpSocket extends AbstractSocket {
 															);
 														}
 														final Future<?> future = callOnMessages(Collections.unmodifiableList(messages));
-														if(tempFileContext.getSize() != 0) {
+														if(tempFileContext != null && tempFileContext.getSize() != 0) {
 															// Close temp file context, thus deleting temp files, once all messages have been handled
 															final TempFileContext closeMeNow = tempFileContext;
 															unbounded.submit(
@@ -189,11 +195,16 @@ public class TcpSocket extends AbstractSocket {
 																	}
 																}
 															);
-															tempFileContext = new TempFileContext();
+															try {
+																tempFileContext = new TempFileContext();
+															} catch(SecurityException e) {
+																logger.log(Level.WARNING, null, e);
+																tempFileContext = null;
+															}
 														}
 													}
 												} finally {
-													tempFileContext.close();
+													if(tempFileContext != null) tempFileContext.close();
 												}
 											} catch(Exception exc) {
 												if(!isClosed()) callOnError(exc);
