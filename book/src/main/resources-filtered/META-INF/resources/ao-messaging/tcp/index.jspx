@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
-Copyright (C) 2016, 2017  AO Industries, Inc.
+Copyright (C) 2016, 2017, 2019  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -36,10 +36,10 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		datePublished="2016-10-16T22:58:00-0500"
 		dateModified="2017-07-18T17:55:22-0500"
 	>
-		<core:child page="changelog" />
+		<core:child page="changelog.jspx" />
 		<core:child page="apidocs/" />
-		<core:child book="/ao-messaging/tcp/client" page="/" />
-		<core:child book="/ao-messaging/tcp/server" page="/" />
+		<core:child book="/ao-messaging/tcp/client" page="/index.jspx" />
+		<core:child book="/ao-messaging/tcp/server" page="/index.jspx" />
 		<ao:include
 			page="/ao-badges/badges.inc.jspx"
 			arg.projectStatus="${currentPage.property.projectStatus}"
@@ -54,17 +54,17 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		</p>
 		<section:section label="Project Links">
 			<ul>
-				<li><core:link page="/">Project Home</core:link></li>
-				<li><core:link page="changelog">Changelog</core:link></li>
-				<li><core:link page="apidocs/">API Docs</core:link></li>
+				<li><core:link page="index.jspx">Project Home</core:link></li>
+				<li><core:link page="changelog.jspx">Changelog</core:link></li>
+				<li><core:link page="apidocs/index.jspx">API Docs</core:link></li>
 				<li><ao:a href="https://search.maven.org/#search%7Cgav%7C1%7Cg:%22@{documented.groupId}%22%20AND%20a:%22@{documented.artifactId}%22">Maven Central Repository</ao:a></li>
 				<li><ao:a href="@{documented.scm.url}">GitHub</ao:a></li>
 			</ul>
 		</section:section>
 		<section:section label="Modules">
 			<ul>
-				<li><core:link book="/ao-messaging/tcp/client" page="/" /></li>
-				<li><core:link book="/ao-messaging/tcp/server" page="/" /></li>
+				<li><core:link book="/ao-messaging/tcp/client" page="/index.jspx" /></li>
+				<li><core:link book="/ao-messaging/tcp/server" page="/index.jspx" /></li>
 			</ul>
 		</section:section>
 	</core:page>

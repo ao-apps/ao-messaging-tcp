@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
-Copyright (C) 2016, 2017  AO Industries, Inc.
+Copyright (C) 2016, 2017, 2019  AO Industries, Inc.
     support@aoindustries.com
     7262 Bull Pen Cir
     Mobile, AL 36695
@@ -55,7 +55,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			>
 				<ul>
 					<li>
-						Deprecated uses of <ao:a rel="nofollow" href="@{javac.link.javaApi}java/io/File#deleteOnExit()">File.deleteOnExit()</ao:a>
+						Deprecated uses of <ao:a rel="nofollow" href="@{javac.link.javaApi}/java/io/File#deleteOnExit()">File.deleteOnExit()</ao:a>
 						in favor of new <ao:a href="https://aoindustries.com/ao-tempfiles/apidocs/com/aoindustries/tempfiles/TempFileContext.html">TempFileContext</ao:a>
 						that does not suffer from a memory leak in long-running applications.
 					</li>
@@ -85,7 +85,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			scmUrl="@{documented.scm.url}"
 		>
 			<ul>
-				<li>New <core:link book="/ao-oss-parent" page="/" /> POM to simplify <code>pom.xml</code> files.</li>
+				<li>New <core:link book="/ao-oss-parent" page="/index.jspx" /> POM to simplify <code>pom.xml</code> files.</li>
 				<li>Project documentation moved to per-project book in <ao:a href="https://semanticcms.com/">SemanticCMS</ao:a> format.</li>
 				<li>Added changelog as top-level project link.</li>
 			</ul>
