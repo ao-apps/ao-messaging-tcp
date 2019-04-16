@@ -55,7 +55,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			>
 				<ul>
 					<li>
-						Deprecated uses of <ao:a rel="nofollow" href="@{javac.link.javaApi}/java/io/File#deleteOnExit()">File.deleteOnExit()</ao:a>
+						Deprecated uses of <ao:a rel="nofollow" href="@{javac.link.javaApi}java/io/File#deleteOnExit()">File.deleteOnExit()</ao:a>
 						in favor of new <ao:a href="https://aoindustries.com/ao-tempfiles/apidocs/com/aoindustries/tempfiles/TempFileContext.html">TempFileContext</ao:a>
 						that does not suffer from a memory leak in long-running applications.
 					</li>
