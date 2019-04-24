@@ -1,6 +1,6 @@
 /*
  * ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
- * Copyright (C) 2014, 2015, 2016, 2017, 2018  AO Industries, Inc.
+ * Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -155,7 +155,7 @@ public class TcpSocket extends AbstractSocket {
 															if(in==null) break;
 														}
 														final int size = in.readCompressedInt();
-														List<Message> messages = new ArrayList<Message>(size);
+														List<Message> messages = new ArrayList<>(size);
 														for(int i=0; i<size; i++) {
 															MessageType type = MessageType.getFromTypeByte(in.readByte());
 															int arraySize = in.readCompressedInt();
@@ -236,7 +236,7 @@ public class TcpSocket extends AbstractSocket {
 			// Enqueue asynchronous write
 			boolean isFirst;
 			if(sendQueue == null) {
-				sendQueue = new LinkedList<Message>();
+				sendQueue = new LinkedList<>();
 				isFirst = true;
 			} else {
 				isFirst = false;
@@ -251,7 +251,7 @@ public class TcpSocket extends AbstractSocket {
 						@Override
 						public void run() {
 							try {
-								final List<Message> messages = new ArrayList<Message>();
+								final List<Message> messages = new ArrayList<>();
 								while(true) {
 									CompressedDataOutputStream out;
 									synchronized(lock) {
