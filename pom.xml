@@ -96,7 +96,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				<groupId>com.aoindustries</groupId><artifactId>ao-messaging-api</artifactId><version>1.1.1-validation-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoindustries</groupId><artifactId>ao-messaging-base</artifactId><version>1.1.1-SNAPSHOT</version>
+				<groupId>com.aoindustries</groupId><artifactId>ao-messaging-base</artifactId><version>1.1.1-validation-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.aoindustries</groupId><artifactId>ao-tempfiles</artifactId><version>1.0.1-validation-SNAPSHOT</version>
