@@ -22,9 +22,9 @@
  */
 package com.aoindustries.messaging.tcp;
 
-import com.aoindustries.io.CompressedDataInputStream;
-import com.aoindustries.io.CompressedDataOutputStream;
 import com.aoindustries.io.IoUtils;
+import com.aoindustries.io.stream.StreamableInput;
+import com.aoindustries.io.stream.StreamableOutput;
 import com.aoindustries.messaging.ByteArray;
 import com.aoindustries.messaging.Message;
 import com.aoindustries.messaging.MessageType;
@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,16 +67,16 @@ public class TcpSocket extends AbstractSocket {
 
 	private final Object lock = new Object();
 	private java.net.Socket socket;
-	private CompressedDataInputStream in;
-	private CompressedDataOutputStream out;
+	private StreamableInput in;
+	private StreamableOutput out;
 
 	public TcpSocket(
 		AbstractSocketContext<? extends AbstractSocket> socketContext,
 		Identifier id,
 		long connectTime,
 		java.net.Socket socket,
-		CompressedDataInputStream in,
-		CompressedDataOutputStream out
+		StreamableInput in,
+		StreamableOutput out
 	) {
 		super(
 			socketContext,
@@ -148,7 +149,7 @@ public class TcpSocket extends AbstractSocket {
 												}
 												try {
 													while(true) {
-														CompressedDataInputStream in;
+														StreamableInput in;
 														synchronized(lock) {
 															// Check if closed
 															in = TcpSocket.this.in;
@@ -189,7 +190,7 @@ public class TcpSocket extends AbstractSocket {
 																			}
 																		} catch(ThreadDeath td) {
 																			throw td;
-																		} catch(Throwable t) {
+																		} catch(RuntimeException | IOException | InterruptedException | ExecutionException t) {
 																			logger.log(Level.SEVERE, null, t);
 																		}
 																	}
@@ -206,7 +207,7 @@ public class TcpSocket extends AbstractSocket {
 												} finally {
 													if(tempFileContext != null) tempFileContext.close();
 												}
-											} catch(Exception exc) {
+											} catch(RuntimeException | IOException exc) {
 												if(!isClosed()) callOnError(exc);
 											} finally {
 												try {
@@ -220,7 +221,7 @@ public class TcpSocket extends AbstractSocket {
 								);
 							}
 							if(onStart!=null) onStart.call(TcpSocket.this);
-						} catch(Exception exc) {
+						} catch(RuntimeException exc) {
 							if(onError!=null) onError.call(exc);
 						}
 					}
@@ -253,7 +254,7 @@ public class TcpSocket extends AbstractSocket {
 							try {
 								final List<Message> messages = new ArrayList<>();
 								while(true) {
-									CompressedDataOutputStream out;
+									StreamableOutput out;
 									synchronized(lock) {
 										// Check if closed
 										out = TcpSocket.this.out;
@@ -285,7 +286,7 @@ public class TcpSocket extends AbstractSocket {
 									}
 									messages.clear();
 								}
-							} catch(Exception exc) {
+							} catch(RuntimeException | IOException exc) {
 								if(!isClosed()) {
 									if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: calling onError");
 									callOnError(exc);
