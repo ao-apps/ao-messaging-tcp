@@ -188,10 +188,8 @@ public class TcpSocket extends AbstractSocket {
 																				// Delete temp files
 																				closeMeNow.close();
 																			}
-																		} catch(ThreadDeath td) {
-																			throw td;
-																		} catch(RuntimeException | IOException | InterruptedException | ExecutionException t) {
-																			logger.log(Level.SEVERE, null, t);
+																		} catch(RuntimeException | IOException | InterruptedException | ExecutionException e) {
+																			logger.log(Level.SEVERE, null, e);
 																		}
 																	}
 																}

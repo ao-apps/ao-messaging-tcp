@@ -36,7 +36,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T20:48:57-0500"
-		dateModified="2019-08-12T12:56:39-0500"
+		dateModified="2019-08-17T01:21:35-0500"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:ao-messaging-tcp:pom.version}" />
@@ -54,6 +54,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			>
 				<ul>
 					<li>Updated for compatibility with <core:link book="/aocode-public" page="/changelog.jspx" element="release-notes-3.0.1">aocode-public-3.0.1</core:link>.</li>
+					<li>No longer catching all <code>Throwable</code>.</li>
 				</ul>
 			</changelog:release>
 		</c:if>
