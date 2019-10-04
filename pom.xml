@@ -102,7 +102,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				<groupId>com.aoindustries</groupId><artifactId>ao-tempfiles</artifactId><version>1.0.1-POST-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>com.aoindustries</groupId><artifactId>aocode-public</artifactId><version>3.1.1-SNAPSHOT</version>
+				<groupId>com.aoindustries</groupId><artifactId>aocode-public</artifactId><version>3.1.1-POST-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
