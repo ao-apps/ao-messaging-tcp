@@ -29,34 +29,30 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<relativePath>../../../ao-oss-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.aoindustries</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>1.2.0-POST-SNAPSHOT</version>
+	<groupId>com.aoindustries</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>1.2.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<properties>
 		<!-- These values are copied from the project being documented -->
-		<documented.groupId>com.aoindustries</documented.groupId><documented.artifactId>ao-messaging-tcp</documented.artifactId>
+		<documented.artifactId>ao-messaging-tcp</documented.artifactId>
 		<documented.javaVersion>1.8</documented.javaVersion>
 		<documented.javac.link.javaApi>${javac.link.javaApi.jdk8}</documented.javac.link.javaApi>
 		<documented.name>AO Messaging TCP</documented.name>
 		<documented.shortTitle>TCP</documented.shortTitle>
-		<documented.url>https://aoindustries.com/ao-messaging/tcp/</documented.url>
 		<documented.description>Asynchronous bidirectional messaging over TCP sockets.</documented.description>
-		<documented.inceptionYear>2014</documented.inceptionYear>
-		<documented.scm.url>https://github.com/aoindustries/${documented.artifactId}</documented.scm.url>
 
-		<description.html><![CDATA[Documentation for <a target="_top" href="${documented.url}">${documented.name}</a> in <a target="_top" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
+		<description.html><![CDATA[Documentation for <a target="_top" href="${project.url}">${documented.name}</a> in <a target="_top" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
 	</properties>
 
-	<name>${documented.name} Book</name>
-	<url>${documented.url}</url>
-	<description>Documentation for ${documented.name} in SemanticCMS format.</description>
-	<inceptionYear>${documented.inceptionYear}</inceptionYear>
+	<name>AO Messaging TCP Book</name>
+	<url>https://aoindustries.com/ao-messaging/tcp/</url>
+	<description>Documentation for AO Messaging TCP in SemanticCMS format.</description>
+	<inceptionYear>2014</inceptionYear>
 
 	<scm>
-		<!-- Can't inherit due to multi-module -->
-		<connection>scm:git:git://github.com/aoindustries/${documented.artifactId}.git</connection>
-		<developerConnection>scm:git:git@github.com:aoindustries/${documented.artifactId}.git</developerConnection>
-		<url>${documented.scm.url}</url>
+		<connection>scm:git:git://github.com/aoindustries/ao-messaging-tcp.git</connection>
+		<developerConnection>scm:git:git@github.com:aoindustries/ao-messaging-tcp.git</developerConnection>
+		<url>https://github.com/aoindustries/ao-messaging-tcp</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -64,7 +60,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<dependencies>
 			<!-- Java EE -->
 			<dependency>
-				<groupId>com.aoindustries</groupId><artifactId>javaee-web-api-bom</artifactId><version>6.0.0${POST-SNAPSHOT}</version>
+				<groupId>com.aoindustries</groupId><artifactId>javaee-web-api-bom</artifactId><version>6.0.1-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -105,7 +101,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		</dependency>
 		<!-- Dependency for dependencyversion-maven-plugin only -->
 		<dependency>
-			<groupId>com.aoindustries</groupId><artifactId>ao-messaging-tcp</artifactId><version>1.2.0-POST-SNAPSHOT</version>
+			<groupId>com.aoindustries</groupId><artifactId>ao-messaging-tcp</artifactId><version>1.2.1-SNAPSHOT</version>
 			<type>pom</type>
 			<scope>provided</scope>
 			<optional>true</optional>
