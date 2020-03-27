@@ -121,110 +121,95 @@ public class TcpSocket extends AbstractSocket {
 	) throws IllegalStateException {
 		synchronized(lock) {
 			if(socket==null || in==null || out==null) throw new IllegalStateException();
-			executors.getUnbounded().submit(
-				new Runnable() {
-					@Override
-					public void run() {
-						try {
-							java.net.Socket socket;
-							synchronized(lock) {
-								socket = TcpSocket.this.socket;
-							}
-							if(socket==null) {
-								if(onError!=null) onError.call(new SocketException("Socket is closed"));
-							} else {
-								// Handle incoming messages in a Thread, can try nio later
-								final Executor unbounded = executors.getUnbounded();
-								unbounded.submit(
-									new Runnable() {
-										@Override
-										public void run() {
-											try {
-												TempFileContext tempFileContext;
+			executors.getUnbounded().submit(() -> {
+				try {
+					java.net.Socket _socket;
+					synchronized(lock) {
+						_socket = TcpSocket.this.socket;
+					}
+					if(_socket==null) {
+						if(onError!=null) onError.call(new SocketException("Socket is closed"));
+					} else {
+						// Handle incoming messages in a Thread, can try nio later
+						final Executor unbounded = executors.getUnbounded();
+						unbounded.submit(() -> {
+							try {
+								TempFileContext tempFileContext;
+								try {
+									tempFileContext = new TempFileContext();
+								} catch(SecurityException e) {
+									logger.log(Level.WARNING, null, e);
+									tempFileContext = null;
+								}
+								try {
+									while(true) {
+										StreamableInput _in;
+										synchronized(lock) {
+											// Check if closed
+											_in = TcpSocket.this.in;
+											if(_in==null) break;
+										}
+										final int size = _in.readCompressedInt();
+										List<Message> messages = new ArrayList<>(size);
+										for(int i=0; i<size; i++) {
+											MessageType type = MessageType.getFromTypeByte(_in.readByte());
+											int arraySize = _in.readCompressedInt();
+											byte[] array = new byte[arraySize];
+											IoUtils.readFully(_in, array, 0, arraySize);
+											messages.add(
+												type.decode(
+													new ByteArray(
+														array,
+														arraySize
+													),
+													tempFileContext
+												)
+											);
+										}
+										final Future<?> future = callOnMessages(Collections.unmodifiableList(messages));
+										if(tempFileContext != null && tempFileContext.getSize() != 0) {
+											// Close temp file context, thus deleting temp files, once all messages have been handled
+											final TempFileContext closeMeNow = tempFileContext;
+											unbounded.submit(() -> {
 												try {
-													tempFileContext = new TempFileContext();
-												} catch(SecurityException e) {
-													logger.log(Level.WARNING, null, e);
-													tempFileContext = null;
-												}
-												try {
-													while(true) {
-														StreamableInput in;
-														synchronized(lock) {
-															// Check if closed
-															in = TcpSocket.this.in;
-															if(in==null) break;
-														}
-														final int size = in.readCompressedInt();
-														List<Message> messages = new ArrayList<>(size);
-														for(int i=0; i<size; i++) {
-															MessageType type = MessageType.getFromTypeByte(in.readByte());
-															int arraySize = in.readCompressedInt();
-															byte[] array = new byte[arraySize];
-															IoUtils.readFully(in, array, 0, arraySize);
-															messages.add(
-																type.decode(
-																	new ByteArray(
-																		array,
-																		arraySize
-																	),
-																	tempFileContext
-																)
-															);
-														}
-														final Future<?> future = callOnMessages(Collections.unmodifiableList(messages));
-														if(tempFileContext != null && tempFileContext.getSize() != 0) {
-															// Close temp file context, thus deleting temp files, once all messages have been handled
-															final TempFileContext closeMeNow = tempFileContext;
-															unbounded.submit(
-																new Runnable() {
-																	@Override
-																	public void run() {
-																		try {
-																			try {
-																				// Wait until all messages handled
-																				future.get();
-																			} finally {
-																				// Delete temp files
-																				closeMeNow.close();
-																			}
-																		} catch(RuntimeException | IOException | InterruptedException | ExecutionException e) {
-																			logger.log(Level.SEVERE, null, e);
-																		}
-																	}
-																}
-															);
-															try {
-																tempFileContext = new TempFileContext();
-															} catch(SecurityException e) {
-																logger.log(Level.WARNING, null, e);
-																tempFileContext = null;
-															}
-														}
+													try {
+														// Wait until all messages handled
+														future.get();
+													} finally {
+														// Delete temp files
+														closeMeNow.close();
 													}
-												} finally {
-													if(tempFileContext != null) tempFileContext.close();
-												}
-											} catch(RuntimeException | IOException exc) {
-												if(!isClosed()) callOnError(exc);
-											} finally {
-												try {
-													close();
-												} catch(IOException e) {
+												} catch(RuntimeException | IOException | InterruptedException | ExecutionException e) {
 													logger.log(Level.SEVERE, null, e);
 												}
+											});
+											try {
+												tempFileContext = new TempFileContext();
+											} catch(SecurityException e) {
+												logger.log(Level.WARNING, null, e);
+												tempFileContext = null;
 											}
 										}
 									}
-								);
+								} finally {
+									if(tempFileContext != null) tempFileContext.close();
+								}
+							} catch(RuntimeException | IOException exc) {
+								if(!isClosed()) callOnError(exc);
+							} finally {
+								try {
+									close();
+								} catch(IOException e) {
+									logger.log(Level.SEVERE, null, e);
+								}
 							}
-							if(onStart!=null) onStart.call(TcpSocket.this);
-						} catch(RuntimeException exc) {
-							if(onError!=null) onError.call(exc);
-						}
+						});
 					}
+					if(onStart!=null) onStart.call(TcpSocket.this);
+				} catch(RuntimeException exc) {
+					if(onError!=null) onError.call(exc);
 				}
-			);
+			});
 		}
 	}
 
@@ -245,59 +230,54 @@ public class TcpSocket extends AbstractSocket {
 				if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: submitting runnable");
 				// When the queue is first created, we submit the queue runner to the executor for queue processing
 				// There is only one executor per queue, and on queue per socket
-				executors.getUnbounded().submit(
-					new Runnable() {
-						@Override
-						public void run() {
+				executors.getUnbounded().submit(() -> {
+					try {
+						final List<Message> msgs = new ArrayList<>();
+						while(true) {
+							StreamableOutput _out;
+							synchronized(lock) {
+								// Check if closed
+								_out = TcpSocket.this.out;
+								if(_out==null) break;
+							}
+							// Get all of the messages until the queue is empty
+							synchronized(sendQueueLock) {
+								if(sendQueue.isEmpty()) {
+									if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: queue empty, flushing and returning");
+									_out.flush();
+									// Remove the empty queue so a new executor will be submitted on next event
+									sendQueue = null;
+									break;
+								} else {
+									msgs.addAll(sendQueue);
+									sendQueue.clear();
+								}
+							}
+							// Write the messages without holding the queue lock
+							final int size = msgs.size();
+							if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: writing " + size + " messages");
+							_out.writeCompressedInt(size);
+							for(int i=0; i<size; i++) {
+								Message message = msgs.get(i);
+								_out.writeByte(message.getMessageType().getTypeByte());
+								ByteArray data = message.encodeAsByteArray();
+								_out.writeCompressedInt(data.size);
+								_out.write(data.array, 0, data.size);
+							}
+							msgs.clear();
+						}
+					} catch(RuntimeException | IOException exc) {
+						if(!isClosed()) {
+							if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: calling onError");
+							callOnError(exc);
 							try {
-								final List<Message> messages = new ArrayList<>();
-								while(true) {
-									StreamableOutput out;
-									synchronized(lock) {
-										// Check if closed
-										out = TcpSocket.this.out;
-										if(out==null) break;
-									}
-									// Get all of the messages until the queue is empty
-									synchronized(sendQueueLock) {
-										if(sendQueue.isEmpty()) {
-											if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: queue empty, flushing and returning");
-											out.flush();
-											// Remove the empty queue so a new executor will be submitted on next event
-											sendQueue = null;
-											break;
-										} else {
-											messages.addAll(sendQueue);
-											sendQueue.clear();
-										}
-									}
-									// Write the messages without holding the queue lock
-									final int size = messages.size();
-									if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: writing " + size + " messages");
-									out.writeCompressedInt(size);
-									for(int i=0; i<size; i++) {
-										Message message = messages.get(i);
-										out.writeByte(message.getMessageType().getTypeByte());
-										ByteArray data = message.encodeAsByteArray();
-										out.writeCompressedInt(data.size);
-										out.write(data.array, 0, data.size);
-									}
-									messages.clear();
-								}
-							} catch(RuntimeException | IOException exc) {
-								if(!isClosed()) {
-									if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: calling onError");
-									callOnError(exc);
-									try {
-										close();
-									} catch(IOException e) {
-										logger.log(Level.SEVERE, null, e);
-									}
-								}
+								close();
+							} catch(IOException e) {
+								logger.log(Level.SEVERE, null, e);
 							}
 						}
 					}
-				);
+				});
 			}
 		}
 	}
