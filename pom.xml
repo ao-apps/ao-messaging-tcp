@@ -58,6 +58,11 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<tag>HEAD</tag>
 	</scm>
 
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/aoindustries/ao-messaging-tcp/issues</url>
+	</issueManagement>
+
 	<profiles>
 		<profile>
 			<id>release</id>
