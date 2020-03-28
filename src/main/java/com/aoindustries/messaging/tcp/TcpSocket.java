@@ -194,7 +194,7 @@ public class TcpSocket extends AbstractSocket {
 								} finally {
 									if(tempFileContext != null) tempFileContext.close();
 								}
-							} catch(RuntimeException | IOException exc) {
+							} catch(Exception exc) {
 								if(!isClosed()) callOnError(exc);
 							} finally {
 								try {
@@ -206,7 +206,7 @@ public class TcpSocket extends AbstractSocket {
 						});
 					}
 					if(onStart!=null) onStart.call(TcpSocket.this);
-				} catch(RuntimeException exc) {
+				} catch(Exception exc) {
 					if(onError!=null) onError.call(exc);
 				}
 			});
@@ -266,7 +266,7 @@ public class TcpSocket extends AbstractSocket {
 							}
 							msgs.clear();
 						}
-					} catch(RuntimeException | IOException exc) {
+					} catch(Exception exc) {
 						if(!isClosed()) {
 							if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: calling onError");
 							callOnError(exc);
