@@ -51,7 +51,6 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 	<inceptionYear>2014</inceptionYear>
 
 	<scm>
-		<!-- Can't inherit due to multi-module -->
 		<connection>scm:git:git://github.com/aoindustries/ao-messaging-tcp.git</connection>
 		<developerConnection>scm:git:git@github.com:aoindustries/ao-messaging-tcp.git</developerConnection>
 		<url>https://github.com/aoindustries/ao-messaging-tcp</url>
