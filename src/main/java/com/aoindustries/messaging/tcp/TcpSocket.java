@@ -44,7 +44,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,8 +54,6 @@ import java.util.logging.Logger;
 public class TcpSocket extends AbstractSocket {
 
 	private static final Logger logger = Logger.getLogger(TcpSocket.class.getName());
-
-	private static final boolean DEBUG = false;
 
 	public static final String PROTOCOL = "tcp";
 
@@ -115,9 +112,10 @@ public class TcpSocket extends AbstractSocket {
 	}
 
 	@Override
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
 	protected void startImpl(
-		final Callback<? super Socket> onStart,
-		final Callback<? super Exception> onError
+		Callback<? super Socket> onStart,
+		Callback<? super Throwable> onError
 	) throws IllegalStateException {
 		synchronized(lock) {
 			if(socket==null || in==null || out==null) throw new IllegalStateException();
@@ -128,7 +126,19 @@ public class TcpSocket extends AbstractSocket {
 						_socket = TcpSocket.this.socket;
 					}
 					if(_socket==null) {
-						if(onError!=null) onError.call(new SocketException("Socket is closed"));
+						SocketException e = new SocketException("Socket is closed");
+						if(onError != null) {
+							logger.log(Level.FINE, "Calling onError", e);
+							try {
+								onError.call(e);
+							} catch(ThreadDeath td) {
+								throw td;
+							} catch(Throwable t) {
+								logger.log(Level.SEVERE, null, t);
+							}
+						} else {
+							logger.log(Level.FINE, "No onError", e);
+						}
 					} else {
 						// Handle incoming messages in a Thread, can try nio later
 						final Executor unbounded = executors.getUnbounded();
@@ -137,8 +147,10 @@ public class TcpSocket extends AbstractSocket {
 								TempFileContext tempFileContext;
 								try {
 									tempFileContext = new TempFileContext();
-								} catch(SecurityException e) {
-									logger.log(Level.WARNING, null, e);
+								} catch(ThreadDeath td) {
+									throw td;
+								} catch(Throwable t) {
+									logger.log(Level.WARNING, null, t);
 									tempFileContext = null;
 								}
 								try {
@@ -176,46 +188,99 @@ public class TcpSocket extends AbstractSocket {
 														// Wait until all messages handled
 														future.get();
 													} finally {
-														// Delete temp files
-														closeMeNow.close();
+														try {
+															// Delete temp files
+															closeMeNow.close();
+														} catch(ThreadDeath td) {
+															throw td;
+														} catch(Throwable t) {
+															logger.log(Level.SEVERE, null, t);
+														}
 													}
-												} catch(RuntimeException | IOException | InterruptedException | ExecutionException e) {
-													logger.log(Level.SEVERE, null, e);
+												} catch(InterruptedException e) {
+													logger.log(Level.FINE, null, e);
+													Thread.currentThread().interrupt();
+												} catch(ThreadDeath td) {
+													throw td;
+												} catch(Throwable t) {
+													logger.log(Level.SEVERE, null, t);
 												}
 											});
 											try {
 												tempFileContext = new TempFileContext();
-											} catch(SecurityException e) {
-												logger.log(Level.WARNING, null, e);
+											} catch(ThreadDeath td) {
+												throw td;
+											} catch(Throwable t) {
+												logger.log(Level.WARNING, null, t);
 												tempFileContext = null;
 											}
 										}
 									}
 								} finally {
-									if(tempFileContext != null) tempFileContext.close();
+									if(tempFileContext != null) {
+										try {
+											tempFileContext.close();
+										} catch(ThreadDeath td) {
+											throw td;
+										} catch(Throwable t) {
+											logger.log(Level.WARNING, null, t);
+										}
+									}
 								}
-							} catch(Exception exc) {
-								if(!isClosed()) callOnError(exc);
+							} catch(ThreadDeath td) {
+								throw td;
+							} catch(Throwable t) {
+								if(!isClosed()) callOnError(t);
 							} finally {
 								try {
 									close();
-								} catch(IOException e) {
-									logger.log(Level.SEVERE, null, e);
+								} catch(ThreadDeath td) {
+									throw td;
+								} catch(Throwable t) {
+									logger.log(Level.SEVERE, null, t);
 								}
 							}
 						});
 					}
-					if(onStart!=null) onStart.call(TcpSocket.this);
-				} catch(Exception exc) {
-					if(onError!=null) onError.call(exc);
+					if(onStart != null) {
+						logger.log(Level.FINE, "Calling onStart: {0}", TcpSocket.this);
+						try {
+							onStart.call(TcpSocket.this);
+						} catch(ThreadDeath td) {
+							throw td;
+						} catch(Throwable t) {
+							logger.log(Level.SEVERE, null, t);
+						}
+					} else {
+						logger.log(Level.FINE, "No onStart: {0}", TcpSocket.this);
+					}
+				} catch(ThreadDeath td) {
+					throw td;
+				} catch(Throwable t) {
+					if(onError != null) {
+						logger.log(Level.FINE, "Calling onError", t);
+						try {
+							onError.call(t);
+						} catch(ThreadDeath td) {
+							throw td;
+						} catch(Throwable t2) {
+							logger.log(Level.SEVERE, null, t2);
+						}
+					} else {
+						logger.log(Level.FINE, "No onError", t);
+					}
 				}
 			});
 		}
 	}
 
 	@Override
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
 	protected void sendMessagesImpl(Collection<? extends Message> messages) {
-		if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: enqueuing " + messages.size() + " messages");
+		if(logger.isLoggable(Level.FINEST)) {
+			int size = messages.size();
+			logger.log(Level.FINEST, "Enqueuing {0} {1}", new Object[]{size, (size == 1) ? "message" : "messages"});
+		}
 		synchronized(sendQueueLock) {
 			// Enqueue asynchronous write
 			boolean isFirst;
@@ -227,7 +292,7 @@ public class TcpSocket extends AbstractSocket {
 			}
 			sendQueue.addAll(messages);
 			if(isFirst) {
-				if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: submitting runnable");
+				logger.log(Level.FINEST, "Submitting runnable");
 				// When the queue is first created, we submit the queue runner to the executor for queue processing
 				// There is only one executor per queue, and on queue per socket
 				executors.getUnbounded().submit(() -> {
@@ -243,7 +308,7 @@ public class TcpSocket extends AbstractSocket {
 							// Get all of the messages until the queue is empty
 							synchronized(sendQueueLock) {
 								if(sendQueue.isEmpty()) {
-									if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: queue empty, flushing and returning");
+									logger.log(Level.FINEST, "run: Queue empty, flushing and returning");
 									_out.flush();
 									// Remove the empty queue so a new executor will be submitted on next event
 									sendQueue = null;
@@ -255,7 +320,9 @@ public class TcpSocket extends AbstractSocket {
 							}
 							// Write the messages without holding the queue lock
 							final int size = msgs.size();
-							if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: writing " + size + " messages");
+							if(logger.isLoggable(Level.FINEST)) {
+								logger.log(Level.FINEST, "run: Writing {0} {1}", new Object[]{size, (size == 1) ? "message" : "messages"});
+							}
 							_out.writeCompressedInt(size);
 							for(int i=0; i<size; i++) {
 								Message message = msgs.get(i);
@@ -266,14 +333,20 @@ public class TcpSocket extends AbstractSocket {
 							}
 							msgs.clear();
 						}
-					} catch(Exception exc) {
+					} catch(ThreadDeath td) {
+						throw td;
+					} catch(Throwable t) {
 						if(!isClosed()) {
-							if(DEBUG) System.err.println("DEBUG: TcpSocket: sendMessagesImpl: run: calling onError");
-							callOnError(exc);
 							try {
-								close();
-							} catch(IOException e) {
-								logger.log(Level.SEVERE, null, e);
+								callOnError(t);
+							} finally {
+								try {
+									close();
+								} catch(ThreadDeath td) {
+									throw td;
+								} catch(Throwable t2) {
+									logger.log(Level.SEVERE, null, t2);
+								}
 							}
 						}
 					}
