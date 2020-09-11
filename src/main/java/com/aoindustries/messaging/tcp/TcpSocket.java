@@ -28,6 +28,7 @@ import com.aoindustries.concurrent.Executors;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.io.stream.StreamableInput;
 import com.aoindustries.io.stream.StreamableOutput;
+import com.aoindustries.lang.Throwables;
 import com.aoindustries.messaging.ByteArray;
 import com.aoindustries.messaging.Message;
 import com.aoindustries.messaging.MessageType;
@@ -112,7 +113,7 @@ public class TcpSocket extends AbstractSocket {
 	}
 
 	@Override
-	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch", "ThrowableResultIgnored", "AssignmentToCatchBlockParameter"})
 	protected void startImpl(
 		Callback<? super Socket> onStart,
 		Callback<? super Throwable> onError
@@ -228,6 +229,11 @@ public class TcpSocket extends AbstractSocket {
 									}
 								}
 							} catch(ThreadDeath td) {
+								try {
+									if(!isClosed()) callOnError(td);
+								} catch(Throwable t) {
+									Throwables.addSuppressed(td, t);
+								}
 								throw td;
 							} catch(Throwable t) {
 								if(!isClosed()) callOnError(t);
@@ -254,28 +260,27 @@ public class TcpSocket extends AbstractSocket {
 					} else {
 						logger.log(Level.FINE, "No onStart: {0}", TcpSocket.this);
 					}
-				} catch(ThreadDeath td) {
-					throw td;
 				} catch(Throwable t) {
 					if(onError != null) {
 						logger.log(Level.FINE, "Calling onError", t);
 						try {
 							onError.call(t);
 						} catch(ThreadDeath td) {
-							throw td;
+							t = Throwables.addSuppressed(t, td);
 						} catch(Throwable t2) {
 							logger.log(Level.SEVERE, null, t2);
 						}
 					} else {
 						logger.log(Level.FINE, "No onError", t);
 					}
+					if(t instanceof ThreadDeath) throw (ThreadDeath)t;
 				}
 			});
 		}
 	}
 
 	@Override
-	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch"})
+	@SuppressWarnings({"UseSpecificCatch", "TooBroadCatch", "AssignmentToCatchBlockParameter"})
 	protected void sendMessagesImpl(Collection<? extends Message> messages) {
 		if(logger.isLoggable(Level.FINEST)) {
 			int size = messages.size();
@@ -333,22 +338,22 @@ public class TcpSocket extends AbstractSocket {
 							}
 							msgs.clear();
 						}
-					} catch(ThreadDeath td) {
-						throw td;
 					} catch(Throwable t) {
 						if(!isClosed()) {
 							try {
 								callOnError(t);
+							} catch(Throwable t2) {
+								t = Throwables.addSuppressed(t, t2);
 							} finally {
 								try {
 									close();
-								} catch(ThreadDeath td) {
-									throw td;
 								} catch(Throwable t2) {
-									logger.log(Level.SEVERE, null, t2);
+									t = Throwables.addSuppressed(t, t2);
 								}
 							}
 						}
+						if(t instanceof ThreadDeath) throw (ThreadDeath)t;
+						logger.log(Level.SEVERE, null, t);
 					}
 				});
 			}
