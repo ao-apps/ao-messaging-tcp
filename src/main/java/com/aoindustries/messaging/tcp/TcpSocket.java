@@ -28,6 +28,7 @@ import com.aoindustries.concurrent.Executors;
 import com.aoindustries.io.IoUtils;
 import com.aoindustries.io.stream.StreamableInput;
 import com.aoindustries.io.stream.StreamableOutput;
+import com.aoindustries.lang.AutoCloseables;
 import com.aoindustries.lang.Throwables;
 import com.aoindustries.messaging.ByteArray;
 import com.aoindustries.messaging.Message;
@@ -232,7 +233,8 @@ public class TcpSocket extends AbstractSocket {
 								try {
 									if(!isClosed()) callOnError(td);
 								} catch(Throwable t) {
-									Throwables.addSuppressed(td, t);
+									Throwable t2 = Throwables.addSuppressed(td, t);
+									assert t2 == td;
 								}
 								throw td;
 							} catch(Throwable t) {
@@ -260,20 +262,21 @@ public class TcpSocket extends AbstractSocket {
 					} else {
 						logger.log(Level.FINE, "No onStart: {0}", TcpSocket.this);
 					}
-				} catch(Throwable t) {
+				} catch(Throwable t0) {
 					if(onError != null) {
-						logger.log(Level.FINE, "Calling onError", t);
+						logger.log(Level.FINE, "Calling onError", t0);
 						try {
-							onError.call(t);
+							onError.call(t0);
 						} catch(ThreadDeath td) {
-							t = Throwables.addSuppressed(t, td);
+							t0 = Throwables.addSuppressed(td, t0);
+							assert t0 == td;
 						} catch(Throwable t2) {
 							logger.log(Level.SEVERE, null, t2);
 						}
 					} else {
-						logger.log(Level.FINE, "No onError", t);
+						logger.log(Level.FINE, "No onError", t0);
 					}
-					if(t instanceof ThreadDeath) throw (ThreadDeath)t;
+					if(t0 instanceof ThreadDeath) throw (ThreadDeath)t0;
 				}
 			});
 		}
@@ -338,22 +341,18 @@ public class TcpSocket extends AbstractSocket {
 							}
 							msgs.clear();
 						}
-					} catch(Throwable t) {
+					} catch(Throwable t0) {
 						if(!isClosed()) {
 							try {
-								callOnError(t);
-							} catch(Throwable t2) {
-								t = Throwables.addSuppressed(t, t2);
+								callOnError(t0);
+							} catch(Throwable t) {
+								t0 = Throwables.addSuppressed(t0, t);
 							} finally {
-								try {
-									close();
-								} catch(Throwable t2) {
-									t = Throwables.addSuppressed(t, t2);
-								}
+								t0 = AutoCloseables.closeAndCatch(t0, this);
 							}
 						}
-						if(t instanceof ThreadDeath) throw (ThreadDeath)t;
-						logger.log(Level.SEVERE, null, t);
+						if(t0 instanceof ThreadDeath) throw (ThreadDeath)t0;
+						logger.log(Level.SEVERE, null, t0);
 					}
 				});
 			}
