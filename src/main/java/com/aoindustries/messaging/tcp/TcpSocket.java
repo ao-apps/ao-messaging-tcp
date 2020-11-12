@@ -103,7 +103,7 @@ public class TcpSocket extends AbstractSocket {
 					}
 				}
 			} finally {
-				executors.dispose();
+				executors.close();
 			}
 		}
 	}
