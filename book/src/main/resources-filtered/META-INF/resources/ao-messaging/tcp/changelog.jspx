@@ -37,7 +37,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T20:48:57-0500"
-		dateModified="2020-09-11T13:43:12-05:00"
+		dateModified="2020-11-25T14:33:58-06:00"
 	>
 		<!-- The current snapshot, unreleased version -->
 		<c:set var="version" value="@{com.aoindustries:ao-messaging-tcp:pom.version}" />
@@ -52,28 +52,37 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				groupId="@{project.groupId}"
 				artifactId="@{documented.artifactId}"
 				scmUrl="@{project.scm.url}"
-			>
-				<ul>
-					<li>
-						Now catching all <code>Throwable</code>.
-						This is more aggressive than the previous behavior of catching all <code>Exception</code>.
-						We made this change to greatly reduce the chances of any <code>Error</code>, such as
-						<code>OutOfMemoryError</code>, being silently lost.
-					</li>
-					<li>
-						Exceptions thrown from <code>on*</code> success callbacks will no longer be passed to
-						<code>onError</code> callbacks.
-					</li>
-					<li>Improved logging:
-						<ol>
-							<li>No more <code>System.err</code></li>
-							<li>Improved and more consistent logging levels</li>
-							<li>Callback logging</li>
-						</ol>
-					</li>
-				</ul>
-			</changelog:release>
+			/>
 		</c:if>
+
+		<changelog:release
+			projectName="@{documented.name}"
+			version="2.0.0"
+			datePublished="2020-11-25T14:33:58-06:00"
+			groupId="@{project.groupId}"
+			artifactId="@{documented.artifactId}"
+			scmUrl="@{project.scm.url}"
+		>
+			<ul>
+				<li>
+					Now catching all <code>Throwable</code>.
+					This is more aggressive than the previous behavior of catching all <code>Exception</code>.
+					We made this change to greatly reduce the chances of any <code>Error</code>, such as
+					<code>OutOfMemoryError</code>, being silently lost.
+				</li>
+				<li>
+					Exceptions thrown from <code>on*</code> success callbacks will no longer be passed to
+					<code>onError</code> callbacks.
+				</li>
+				<li>Improved logging:
+					<ol>
+						<li>No more <code>System.err</code></li>
+						<li>Improved and more consistent logging levels</li>
+						<li>Callback logging</li>
+					</ol>
+				</li>
+			</ul>
+		</changelog:release>
 
 		<changelog:release
 			projectName="@{documented.name}"
