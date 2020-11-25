@@ -29,7 +29,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<relativePath>../../../ao-oss-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.aoindustries</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>2.0.0-SNAPSHOT</version>
+	<groupId>com.aoindustries</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>2.0.0</version>
 	<packaging>bundle</packaging>
 
 	<properties>
@@ -51,7 +51,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		<connection>scm:git:git://github.com/aoindustries/ao-messaging-tcp.git</connection>
 		<developerConnection>scm:git:git@github.com:aoindustries/ao-messaging-tcp.git</developerConnection>
 		<url>https://github.com/aoindustries/ao-messaging-tcp</url>
-		<tag>HEAD</tag>
+		<tag>ao-messaging-tcp-book-2.0.0</tag>
 	</scm>
 
 	<issueManagement>
