@@ -22,7 +22,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 -->
 <jsp:root
-	xmlns:ao="https://aoindustries.com/ao-taglib/"
+	xmlns:ao="https://oss.aoapps.com/taglib/"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:changelog="https://semanticcms.com/changelog/taglib/"
 	xmlns:core="https://semanticcms.com/core/taglib/"
@@ -37,7 +37,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		shortTitle="Changelog"
 		tocLevels="1"
 		datePublished="2016-10-29T20:48:57-05:00"
-		dateModified="2021-05-26T06:36:49-05:00"
+		dateModified="2021-05-31T01:04:26-05:00"
 	>
 		<c:if test="${fn:endsWith('@{project.version}', '-SNAPSHOT') and !fn:endsWith('@{project.version}', '-POST-SNAPSHOT')}">
 			<changelog:release
@@ -45,10 +45,12 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				version="@{project.version}"
 				groupId="@{project.groupId}"
 				artifactId="@{documented.artifactId}"
+				repository="https://s01.oss.sonatype.org/content/repositories/snapshots/"
 				scmUrl="@{project.scm.url}"
 			>
 				<ul>
 					<li>Minimum Java version changed from 1.8 to 11.</li>
+					<li>Maven artifact relocated from <code>com.aoindustries:ao-messaging-tcp</code> to <code>com.aoapps:ao-messaging-tcp</code>.</li>
 				</ul>
 			</changelog:release>
 		</c:if>
@@ -57,7 +59,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="2.0.0"
 			datePublished="2020-11-25T14:33:58-06:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
@@ -86,7 +88,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.2.1"
 			datePublished="2020-03-28T19:38:27-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
@@ -103,12 +105,12 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.2.0"
 			datePublished="2019-10-05T19:41:26-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
 			<ul>
-				<li>Updated for compatibility with <core:link book="/aocode-public" page="/changelog.jspx" element="release-notes-3.1.0">aocode-public-3.1.0</core:link>.</li>
+				<li>Updated for compatibility with <core:link book="/hodgepodge" page="/changelog.jspx" element="release-notes-3.1.0">aocode-public-3.1.0</core:link>.</li>
 				<li>No longer catching all <code>Throwable</code>.</li>
 			</ul>
 		</changelog:release>
@@ -117,7 +119,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.1.1"
 			datePublished="2019-06-21T05:36:24-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
@@ -135,7 +137,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.1.0"
 			datePublished="2019-04-24T19:22:55-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
@@ -143,7 +145,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				<li>Minimum Java version changed from 1.6 to 1.7.</li>
 				<li>
 					Deprecated uses of <ao:a rel="nofollow" href="@{javadoc.link.javase}java/io/File#deleteOnExit()">File.deleteOnExit()</ao:a>
-					in favor of new <ao:a href="https://aoindustries.com/ao-tempfiles/apidocs/com/aoindustries/tempfiles/TempFileContext.html">TempFileContext</ao:a>
+					in favor of new <ao:a href="https://oss.aoapps.com/tempfiles/apidocs/com/aoindustries/tempfiles/TempFileContext.html">TempFileContext</ao:a>
 					that does not suffer from a memory leak in long-running applications.
 				</li>
 			</ul>
@@ -153,7 +155,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.3"
 			datePublished="2017-07-20T09:01:05-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
@@ -166,12 +168,12 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.2"
 			datePublished="2016-11-16T01:23:34-06:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
 			<ul>
-				<li>New <core:link book="/ao-oss-parent" page="/index.jspx" /> POM to simplify <code>pom.xml</code> files.</li>
+				<li>New <core:link book="/parent" page="/index.jspx" /> POM to simplify <code>pom.xml</code> files.</li>
 				<li>Project documentation moved to per-project book in <ao:a href="https://semanticcms.com/">SemanticCMS</ao:a> format.</li>
 				<li>Added changelog as top-level project link.</li>
 			</ul>
@@ -181,7 +183,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.1"
 			datePublished="2016-10-20T18:44:00-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>
@@ -195,7 +197,7 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 			projectName="@{documented.name}"
 			version="1.0.0"
 			datePublished="2016-10-09T22:19:00-05:00"
-			groupId="@{project.groupId}"
+			groupId="com.aoindustries"
 			artifactId="@{documented.artifactId}"
 			scmUrl="@{project.scm.url}"
 		>

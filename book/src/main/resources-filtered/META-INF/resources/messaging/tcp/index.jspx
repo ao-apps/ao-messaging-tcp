@@ -22,7 +22,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 -->
 <jsp:root
-	xmlns:ao="https://aoindustries.com/ao-taglib/"
+	xmlns:ao="https://oss.aoapps.com/taglib/"
 	xmlns:core="https://semanticcms.com/core/taglib/"
 	xmlns:jsp="http://java.sun.com/JSP/Page"
 	xmlns:section="https://semanticcms.com/section/taglib/"
@@ -32,15 +32,14 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 	<jsp:directive.page session="false" />
 	<core:page
 		title="@{documented.name}"
-		shortTitle="@{documented.shortTitle}"
 		description="@{documented.description}"
 		datePublished="2016-10-16T22:58:00-05:00"
-		dateModified="2020-03-24T14:01:33-05:00"
+		dateModified="2021-05-31T01:25:50-05:00"
 	>
 		<core:child page="changelog.jspx" />
 		<core:child page="apidocs/index.jspx" />
-		<core:child book="/ao-messaging/tcp/client" page="/index.jspx" />
-		<core:child book="/ao-messaging/tcp/server" page="/index.jspx" />
+		<core:child book="/messaging/tcp/client" page="/index.jspx" />
+		<core:child book="/messaging/tcp/server" page="/index.jspx" />
 		<header>
 			<ao:include
 				page="/ao-badges/badges.inc.jspx"
@@ -66,8 +65,8 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 		</section:nav>
 		<section:section label="Modules">
 			<ul>
-				<li><core:link book="/ao-messaging/tcp/client" page="/index.jspx" /></li>
-				<li><core:link book="/ao-messaging/tcp/server" page="/index.jspx" /></li>
+				<li><core:link book="/messaging/tcp/client" page="/index.jspx" /></li>
+				<li><core:link book="/messaging/tcp/server" page="/index.jspx" /></li>
 			</ul>
 		</section:section>
 	</core:page>
