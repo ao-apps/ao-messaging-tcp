@@ -1,6 +1,6 @@
 /*
  * ao-messaging-tcp - Asynchronous bidirectional messaging over TCP sockets.
- * Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -20,24 +20,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.aoindustries.messaging.tcp;
+package com.aoapps.messaging.tcp;
 
-import com.aoindustries.concurrent.Callback;
-import com.aoindustries.concurrent.Executor;
-import com.aoindustries.concurrent.Executors;
-import com.aoindustries.io.IoUtils;
-import com.aoindustries.io.stream.StreamableInput;
-import com.aoindustries.io.stream.StreamableOutput;
-import com.aoindustries.lang.AutoCloseables;
-import com.aoindustries.lang.Throwables;
-import com.aoindustries.messaging.ByteArray;
-import com.aoindustries.messaging.Message;
-import com.aoindustries.messaging.MessageType;
-import com.aoindustries.messaging.Socket;
-import com.aoindustries.messaging.base.AbstractSocket;
-import com.aoindustries.messaging.base.AbstractSocketContext;
-import com.aoindustries.security.Identifier;
-import com.aoindustries.tempfiles.TempFileContext;
+import com.aoapps.concurrent.Callback;
+import com.aoapps.concurrent.Executor;
+import com.aoapps.concurrent.Executors;
+import com.aoapps.hodgepodge.io.stream.StreamableInput;
+import com.aoapps.hodgepodge.io.stream.StreamableOutput;
+import com.aoapps.lang.AutoCloseables;
+import com.aoapps.lang.Throwables;
+import com.aoapps.lang.io.IoUtils;
+import com.aoapps.messaging.ByteArray;
+import com.aoapps.messaging.Message;
+import com.aoapps.messaging.MessageType;
+import com.aoapps.messaging.Socket;
+import com.aoapps.messaging.base.AbstractSocket;
+import com.aoapps.messaging.base.AbstractSocketContext;
+import com.aoapps.security.Identifier;
+import com.aoapps.tempfiles.TempFileContext;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
