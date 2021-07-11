@@ -51,6 +51,10 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 				<li><a target="${javadoc.target}" href="https://oss.aoapps.com/messaging/tcp/server/">AO Messaging TCP Server</a></li>
 			</ul>
 		</div>]]></javadoc.modules>
+		<!-- SonarCloud.io -->
+		<sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
+		<sonar.organization>aoindustries</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<name>AO Messaging TCP</name>
