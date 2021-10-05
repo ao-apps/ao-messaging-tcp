@@ -74,20 +74,20 @@ along with ao-messaging-tcp.  If not, see <http://www.gnu.org/licenses />.
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/aoindustries/ao-messaging-tcp.git</connection>
-		<developerConnection>scm:git:git@github.com:aoindustries/ao-messaging-tcp.git</developerConnection>
-		<url>https://github.com/aoindustries/ao-messaging-tcp</url>
+		<connection>scm:git:git://github.com/ao-apps/ao-messaging-tcp.git</connection>
+		<developerConnection>scm:git:git@github.com:ao-apps/ao-messaging-tcp.git</developerConnection>
+		<url>https://github.com/ao-apps/ao-messaging-tcp</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/aoindustries/ao-messaging-tcp/issues</url>
+		<url>https://github.com/ao-apps/ao-messaging-tcp/issues</url>
 	</issueManagement>
 
 	<ciManagement>
 		<system>GitHub Actions</system>
-		<url>https://github.com/aoindustries/ao-messaging-tcp/actions</url>
+		<url>https://github.com/ao-apps/ao-messaging-tcp/actions</url>
 	</ciManagement>
 
 	<repositories>
