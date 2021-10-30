@@ -201,6 +201,7 @@ public class TcpSocket extends AbstractSocket {
 													}
 												} catch(InterruptedException e) {
 													logger.log(Level.FINE, null, e);
+													// Restore the interrupted status
 													Thread.currentThread().interrupt();
 												} catch(ThreadDeath td) {
 													throw td;
@@ -233,6 +234,7 @@ public class TcpSocket extends AbstractSocket {
 								try {
 									if(!isClosed()) callOnError(td);
 								} catch(Throwable t) {
+									@SuppressWarnings("ThrowableResultIgnored")
 									Throwable t2 = Throwables.addSuppressed(td, t);
 									assert t2 == td;
 								}
