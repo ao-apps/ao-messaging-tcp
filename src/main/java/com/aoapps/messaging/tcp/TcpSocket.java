@@ -71,18 +71,18 @@ public class TcpSocket extends AbstractSocket {
   private StreamableOutput out;
 
   public TcpSocket(
-    AbstractSocketContext<? extends AbstractSocket> socketContext,
-    Identifier id,
-    long connectTime,
-    java.net.Socket socket,
-    StreamableInput in,
-    StreamableOutput out
+      AbstractSocketContext<? extends AbstractSocket> socketContext,
+      Identifier id,
+      long connectTime,
+      java.net.Socket socket,
+      StreamableInput in,
+      StreamableOutput out
   ) {
     super(
-      socketContext,
-      id,
-      connectTime,
-      socket.getRemoteSocketAddress()
+        socketContext,
+        id,
+        connectTime,
+        socket.getRemoteSocketAddress()
     );
     this.socket = socket;
     this.in = in;
@@ -117,8 +117,8 @@ public class TcpSocket extends AbstractSocket {
   @Override
   @SuppressWarnings({"UseSpecificCatch", "TooBroadCatch", "ThrowableResultIgnored", "AssignmentToCatchBlockParameter"})
   protected void startImpl(
-    Callback<? super Socket> onStart,
-    Callback<? super Throwable> onError
+      Callback<? super Socket> onStart,
+      Callback<? super Throwable> onError
   ) throws IllegalStateException {
     synchronized (lock) {
       if (socket == null || in == null || out == null) {
@@ -170,19 +170,19 @@ public class TcpSocket extends AbstractSocket {
                     }
                     final int size = _in.readCompressedInt();
                     List<Message> messages = new ArrayList<>(size);
-                    for (int i=0; i<size; i++) {
+                    for (int i = 0; i < size; i++) {
                       MessageType type = MessageType.getFromTypeByte(_in.readByte());
                       int arraySize = _in.readCompressedInt();
                       byte[] array = new byte[arraySize];
                       IoUtils.readFully(_in, array, 0, arraySize);
                       messages.add(
-                        type.decode(
-                          new ByteArray(
-                            array,
-                            arraySize
-                          ),
-                          tempFileContext
-                        )
+                          type.decode(
+                              new ByteArray(
+                                  array,
+                                  arraySize
+                              ),
+                              tempFileContext
+                          )
                       );
                     }
                     final Future<?> future = callOnMessages(Collections.unmodifiableList(messages));
@@ -288,7 +288,7 @@ public class TcpSocket extends AbstractSocket {
             logger.log(Level.FINE, "No onError", t0);
           }
           if (t0 instanceof ThreadDeath) {
-            throw (ThreadDeath)t0;
+            throw (ThreadDeath) t0;
           }
         }
       });
@@ -347,7 +347,7 @@ public class TcpSocket extends AbstractSocket {
                 logger.log(Level.FINEST, "run: Writing {0} {1}", new Object[]{size, (size == 1) ? "message" : "messages"});
               }
               _out.writeCompressedInt(size);
-              for (int i=0; i<size; i++) {
+              for (int i = 0; i < size; i++) {
                 Message message = msgs.get(i);
                 _out.writeByte(message.getMessageType().getTypeByte());
                 ByteArray data = message.encodeAsByteArray();
@@ -367,7 +367,7 @@ public class TcpSocket extends AbstractSocket {
               }
             }
             if (t0 instanceof ThreadDeath) {
-              throw (ThreadDeath)t0;
+              throw (ThreadDeath) t0;
             }
             logger.log(Level.SEVERE, null, t0);
           }
