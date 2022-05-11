@@ -70,6 +70,9 @@ public class TcpSocket extends AbstractSocket {
   private StreamableInput in;
   private StreamableOutput out;
 
+  /**
+   * Creates a new TCP socket.
+   */
   public TcpSocket(
       AbstractSocketContext<? extends AbstractSocket> socketContext,
       Identifier id,
@@ -126,11 +129,11 @@ public class TcpSocket extends AbstractSocket {
       }
       executors.getUnbounded().submit(() -> {
         try {
-          java.net.Socket _socket;
+          java.net.Socket mySocket;
           synchronized (lock) {
-            _socket = TcpSocket.this.socket;
+            mySocket = TcpSocket.this.socket;
           }
-          if (_socket == null) {
+          if (mySocket == null) {
             SocketException e = new SocketException("Socket is closed");
             if (onError != null) {
               logger.log(Level.FINE, "Calling onError", e);
@@ -160,21 +163,21 @@ public class TcpSocket extends AbstractSocket {
                 }
                 try {
                   while (true) {
-                    StreamableInput _in;
+                    StreamableInput myIn;
                     synchronized (lock) {
                       // Check if closed
-                      _in = TcpSocket.this.in;
-                      if (_in == null) {
+                      myIn = TcpSocket.this.in;
+                      if (myIn == null) {
                         break;
                       }
                     }
-                    final int size = _in.readCompressedInt();
+                    final int size = myIn.readCompressedInt();
                     List<Message> messages = new ArrayList<>(size);
                     for (int i = 0; i < size; i++) {
-                      MessageType type = MessageType.getFromTypeByte(_in.readByte());
-                      int arraySize = _in.readCompressedInt();
+                      MessageType type = MessageType.getFromTypeByte(myIn.readByte());
+                      int arraySize = myIn.readCompressedInt();
                       byte[] array = new byte[arraySize];
-                      IoUtils.readFully(_in, array, 0, arraySize);
+                      IoUtils.readFully(myIn, array, 0, arraySize);
                       messages.add(
                           type.decode(
                               new ByteArray(
@@ -320,11 +323,11 @@ public class TcpSocket extends AbstractSocket {
           try {
             final List<Message> msgs = new ArrayList<>();
             while (true) {
-              StreamableOutput _out;
+              StreamableOutput myOut;
               synchronized (lock) {
                 // Check if closed
-                _out = TcpSocket.this.out;
-                if (_out == null) {
+                myOut = TcpSocket.this.out;
+                if (myOut == null) {
                   break;
                 }
               }
@@ -332,7 +335,7 @@ public class TcpSocket extends AbstractSocket {
               synchronized (sendQueueLock) {
                 if (sendQueue.isEmpty()) {
                   logger.log(Level.FINEST, "run: Queue empty, flushing and returning");
-                  _out.flush();
+                  myOut.flush();
                   // Remove the empty queue so a new executor will be submitted on next event
                   sendQueue = null;
                   break;
@@ -346,13 +349,13 @@ public class TcpSocket extends AbstractSocket {
               if (logger.isLoggable(Level.FINEST)) {
                 logger.log(Level.FINEST, "run: Writing {0} {1}", new Object[]{size, (size == 1) ? "message" : "messages"});
               }
-              _out.writeCompressedInt(size);
+              myOut.writeCompressedInt(size);
               for (int i = 0; i < size; i++) {
                 Message message = msgs.get(i);
-                _out.writeByte(message.getMessageType().getTypeByte());
+                myOut.writeByte(message.getMessageType().getTypeByte());
                 ByteArray data = message.encodeAsByteArray();
-                _out.writeCompressedInt(data.size);
-                _out.write(data.array, 0, data.size);
+                myOut.writeCompressedInt(data.size);
+                myOut.write(data.array, 0, data.size);
               }
               msgs.clear();
             }
