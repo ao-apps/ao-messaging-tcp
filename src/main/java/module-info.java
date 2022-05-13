@@ -32,4 +32,4 @@ module com.aoapps.messaging.tcp {
   requires com.aoapps.tempfiles; // <groupId>com.aoapps</groupId><artifactId>ao-tempfiles</artifactId>
   // Java SE
   requires java.logging;
-} // TODO: Avoiding rewrite-maven-plugin-4.22.2 truncation
+}
