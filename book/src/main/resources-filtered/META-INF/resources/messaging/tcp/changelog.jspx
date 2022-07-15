@@ -37,7 +37,7 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     shortTitle="Changelog"
     tocLevels="1"
     datePublished="2016-10-29T20:48:57-05:00"
-    dateModified="2021-07-21T01:41:45-05:00"
+    dateModified="2022-07-15T17:56:34-05:00"
   >
     <c:if test="${fn:endsWith('@{project.version}', '-SNAPSHOT') and !fn:endsWith('@{project.version}', '-POST-SNAPSHOT')}">
       <changelog:release
@@ -47,7 +47,11 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
         artifactId="@{documented.artifactId}"
         repository="@{nexusUrl}content/repositories/snapshots/"
         scmUrl="@{project.scm.url}"
-      />
+      >
+        <ul>
+          <li>Deferring creation of <code>TempFileContext</code> until first needed.</li>
+        </ul>
+      </changelog:release>
     </c:if>
 
     <changelog:release

@@ -31,6 +31,7 @@ import com.aoapps.hodgepodge.io.stream.StreamableOutput;
 import com.aoapps.lang.AutoCloseables;
 import com.aoapps.lang.Throwables;
 import com.aoapps.lang.io.IoUtils;
+import com.aoapps.lang.io.function.IOSupplier;
 import com.aoapps.messaging.ByteArray;
 import com.aoapps.messaging.Message;
 import com.aoapps.messaging.MessageType;
@@ -48,6 +49,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -152,16 +154,26 @@ public class TcpSocket extends AbstractSocket {
             final Executor unbounded = executors.getUnbounded();
             unbounded.submit(() -> {
               try {
-                TempFileContext tempFileContext;
+                AtomicReference<TempFileContext> tempFileContextRef = new AtomicReference<>();
                 try {
-                  tempFileContext = new TempFileContext();
-                } catch (ThreadDeath td) {
-                  throw td;
-                } catch (Throwable t) {
-                  logger.log(Level.WARNING, null, t);
-                  tempFileContext = null;
-                }
-                try {
+                  IOSupplier<TempFileContext> tempFileContextSupplier = () -> {
+                    TempFileContext tempFileContext = tempFileContextRef.get();
+                    if (tempFileContext == null) {
+                      tempFileContext = new TempFileContext();
+                      if (!tempFileContextRef.compareAndSet(null, tempFileContext)) {
+                        try {
+                          tempFileContext.close();
+                        } catch (ThreadDeath td) {
+                          throw td;
+                        } catch (Throwable t) {
+                          logger.log(Level.WARNING, null, t);
+                        }
+                        tempFileContext = tempFileContextRef.get();
+                        assert tempFileContext != null;
+                      }
+                    }
+                    return tempFileContext;
+                  };
                   while (true) {
                     StreamableInput myIn;
                     synchronized (lock) {
@@ -184,11 +196,12 @@ public class TcpSocket extends AbstractSocket {
                                   array,
                                   arraySize
                               ),
-                              tempFileContext
+                              tempFileContextSupplier
                           )
                       );
                     }
                     final Future<?> future = callOnMessages(Collections.unmodifiableList(messages));
+                    TempFileContext tempFileContext = tempFileContextRef.get();
                     if (tempFileContext != null && tempFileContext.getSize() != 0) {
                       // Close temp file context, thus deleting temp files, once all messages have been handled
                       final TempFileContext closeMeNow = tempFileContext;
@@ -217,17 +230,11 @@ public class TcpSocket extends AbstractSocket {
                           logger.log(Level.SEVERE, null, t);
                         }
                       });
-                      try {
-                        tempFileContext = new TempFileContext();
-                      } catch (ThreadDeath td) {
-                        throw td;
-                      } catch (Throwable t) {
-                        logger.log(Level.WARNING, null, t);
-                        tempFileContext = null;
-                      }
+                      tempFileContextRef.set(null);
                     }
                   }
                 } finally {
+                  TempFileContext tempFileContext = tempFileContextRef.get();
                   if (tempFileContext != null) {
                     try {
                       tempFileContext.close();
