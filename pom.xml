@@ -29,7 +29,7 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     <relativePath>../../parent/pom.xml</relativePath>
   </parent>
 
-  <groupId>com.aoapps</groupId><artifactId>ao-messaging-tcp</artifactId><version>3.1.0</version>
+  <groupId>com.aoapps</groupId><artifactId>ao-messaging-tcp</artifactId><version>3.1.0-POST-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <properties>
@@ -91,7 +91,7 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     <connection>scm:git:git://github.com/ao-apps/ao-messaging-tcp.git</connection>
     <developerConnection>scm:git:git@github.com:ao-apps/ao-messaging-tcp.git</developerConnection>
     <url>https://github.com/ao-apps/ao-messaging-tcp</url>
-    <tag>ao-messaging-tcp-3.1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
