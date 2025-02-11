@@ -29,7 +29,7 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     <relativePath>../../../parent/pom.xml</relativePath>
   </parent>
 
-  <groupId>com.aoapps</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>3.1.0-POST-SNAPSHOT</version>
+  <groupId>com.aoapps</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>3.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
@@ -41,9 +41,6 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     <documented.artifactId>ao-messaging-tcp</documented.artifactId>
     <documented.name>AO Messaging TCP</documented.name>
     <documented.description>Asynchronous bidirectional messaging over TCP sockets.</documented.description>
-    <!-- Java 1.8 -->
-    <documented.javase.version>1.8</documented.javase.version>
-    <documented.javadoc.link.javase>${javadoc.link.javase.8}</documented.javadoc.link.javase>
 
     <description.html><![CDATA[Documentation for <a target="${javadoc.target}" href="${project.url}">${documented.name}</a> in <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
   </properties>
