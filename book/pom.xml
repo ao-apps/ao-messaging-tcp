@@ -29,12 +29,12 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     <relativePath>../../../parent/pom.xml</relativePath>
   </parent>
 
-  <groupId>com.aoapps</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>3.2.0</version>
+  <groupId>com.aoapps</groupId><artifactId>ao-messaging-tcp-book</artifactId><version>3.2.0-POST-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
     <!-- Must be set to ${git.commit.time} for snapshots or ISO 8601 timestamp for releases. -->
-    <project.build.outputTimestamp>2026-02-05T22:50:58Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
     <module.name>com.aoapps.messaging.tcp.book</module.name>
     <subproject.subpath>book/</subproject.subpath>
     <!-- Java 17 -->
@@ -84,7 +84,7 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
     <connection>scm:git:git://github.com/ao-apps/ao-messaging-tcp.git</connection>
     <developerConnection>scm:git:git@github.com:ao-apps/ao-messaging-tcp.git</developerConnection>
     <url>https://github.com/ao-apps/ao-messaging-tcp</url>
-    <tag>ao-messaging-tcp-book-3.2.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
