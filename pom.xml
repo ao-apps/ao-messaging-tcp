@@ -236,7 +236,7 @@ along with ao-messaging-tcp.  If not, see <https://www.gnu.org/licenses/>.
         <groupId>com.aoapps</groupId><artifactId>ao-lang</artifactId><version>5.7.0${POST-SNAPSHOT}</version>
       </dependency>
       <dependency>
-        <groupId>com.aoapps</groupId><artifactId>ao-messaging-api</artifactId><version>3.2.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
+        <groupId>com.aoapps</groupId><artifactId>ao-messaging-api</artifactId><version>3.2.0${POST-SNAPSHOT}</version>
       </dependency>
       <dependency>
         <groupId>com.aoapps</groupId><artifactId>ao-messaging-base</artifactId><version>3.2.0-SNAPSHOT<!-- ${POST-SNAPSHOT} --></version>
