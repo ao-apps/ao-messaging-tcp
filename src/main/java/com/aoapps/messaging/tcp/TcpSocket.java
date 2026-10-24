@@ -145,7 +145,7 @@ public class TcpSocket extends AbstractSocket {
               } catch (ThreadDeath td) {
                 throw td;
               } catch (Throwable t) {
-                logger.log(Level.SEVERE, null, t);
+                logger.log(Level.SEVERE, "TODO: message here", t);
               }
             } else {
               logger.log(Level.FINE, "No onError", e);
@@ -167,7 +167,7 @@ public class TcpSocket extends AbstractSocket {
                         } catch (ThreadDeath td) {
                           throw td;
                         } catch (Throwable t) {
-                          logger.log(Level.WARNING, null, t);
+                          logger.log(Level.WARNING, "TODO: message here", t);
                         }
                         tempFileContext = tempFileContextRef.get();
                         assert tempFileContext != null;
@@ -218,17 +218,17 @@ public class TcpSocket extends AbstractSocket {
                             } catch (ThreadDeath td) {
                               throw td;
                             } catch (Throwable t) {
-                              logger.log(Level.SEVERE, null, t);
+                              logger.log(Level.SEVERE, "TODO: message here", t);
                             }
                           }
                         } catch (InterruptedException e) {
-                          logger.log(Level.FINE, null, e);
+                          logger.log(Level.FINE, "TODO: message here", e);
                           // Restore the interrupted status
                           Thread.currentThread().interrupt();
                         } catch (ThreadDeath td) {
                           throw td;
                         } catch (Throwable t) {
-                          logger.log(Level.SEVERE, null, t);
+                          logger.log(Level.SEVERE, "TODO: message here", t);
                         }
                       });
                       tempFileContextRef.set(null);
@@ -242,7 +242,7 @@ public class TcpSocket extends AbstractSocket {
                     } catch (ThreadDeath td) {
                       throw td;
                     } catch (Throwable t) {
-                      logger.log(Level.WARNING, null, t);
+                      logger.log(Level.WARNING, "TODO: message here", t);
                     }
                   }
                 }
@@ -267,7 +267,7 @@ public class TcpSocket extends AbstractSocket {
                 } catch (ThreadDeath td) {
                   throw td;
                 } catch (Throwable t) {
-                  logger.log(Level.SEVERE, null, t);
+                  logger.log(Level.SEVERE, "TODO: message here", t);
                 }
               }
             });
@@ -279,7 +279,7 @@ public class TcpSocket extends AbstractSocket {
             } catch (ThreadDeath td) {
               throw td;
             } catch (Throwable t) {
-              logger.log(Level.SEVERE, null, t);
+              logger.log(Level.SEVERE, "TODO: message here", t);
             }
           } else {
             logger.log(Level.FINE, "No onStart: {0}", TcpSocket.this);
@@ -293,7 +293,7 @@ public class TcpSocket extends AbstractSocket {
               t0 = Throwables.addSuppressed(td, t0);
               assert t0 == td;
             } catch (Throwable t2) {
-              logger.log(Level.SEVERE, null, t2);
+              logger.log(Level.SEVERE, "TODO: message here", t2);
             }
           } else {
             logger.log(Level.FINE, "No onError", t0);
@@ -380,7 +380,7 @@ public class TcpSocket extends AbstractSocket {
             if (t0 instanceof ThreadDeath) {
               throw (ThreadDeath) t0;
             }
-            logger.log(Level.SEVERE, null, t0);
+            logger.log(Level.SEVERE, "TODO: message here", t0);
           }
         });
       }
